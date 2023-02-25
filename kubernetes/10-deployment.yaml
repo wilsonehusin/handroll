@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .app.name }}
+  namespace: {{ .namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .app.name }}
+      version: {{ .app.version }}
+  template:
+    metadata:
+      labels:
+        app: {{ .app.name }}
+        version: {{ .app.version }}
+    spec:
+      serviceAccountName: {{ .app.name }}
+      containers:
+        - image: {{ .images.handroll.name }}:{{ .images.handroll.tag}}
+          imagePullPolicy: Always
+          name: {{ .app.name }}
+          ports:
+            - containerPort: {{ .app.port }}
+            - containerPort: 9090
+          volumeMounts:
+            - name: data
+              mountPath: {{ .app.dataPath }}
+            - name: litestream
+              mountPath: /etc/litestream
+          envFrom:
+            - secretRef:
+                name: litestream
+            {{ if .app.envFrom }}{{ range $kind, $name := .app.envFrom -}}
+            - {{ $kind }}:
+                name: "{{ $name }}"
+            {{ end }}{{- end }}
+          env:
+            - name: DB_PATH
+              value: {{ .app.dbPath }}
+            - name: LITESTREAM_CONFIG_PATH
+              value: /etc/litestream/litestream.yaml
+            - name: LITESTREAM_REPLICA_PATH
+              value: {{ .app.name -}}.db
+            {{ if .app.env }}{{ range $key, $val := .app.env -}}
+            - name: {{ $key }}
+              value: "{{ $val }}"
+            {{ end }}{{- end }}
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: litestream
+          configMap:
+            name: litestream
+            items:
+              - key: litestream.yaml
+                path: litestream.yaml

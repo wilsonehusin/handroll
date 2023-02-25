@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .app.name }}
+  namespace: {{ .namespace }}
+  labels:
+    app: {{ .app.name }}
+spec:
+  selector:
+    app: {{ .app.name }}
+  ports:
+    - name: http
+      port: 8000
+      targetPort: {{ .app.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: litestream
+  namespace: {{ .namespace }}
+  labels:
+    app: {{ .app.name }}
+  annotations:
+    prometheus.io/port: "9090"
+    prometheus.io/scrape: "true"
+spec:
+  selector:
+    app: {{ .app.name }}
+  ports:
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ .app.name }}
+  namespace: {{ .namespace }}
+spec:
+  rules:
+    - host: {{ .hostname }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .app.name }}
+                port:
+                  name: http

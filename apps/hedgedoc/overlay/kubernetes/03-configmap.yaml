@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hedgedoc
+  namespace: hedgedoc
+data:
+  CMD_DOMAIN: md.xargs.dev
+  CMD_ALLOW_ORIGIN: md.xargs.dev
+  CMD_DB_URL: "sqlite:/data/hedgedoc.db"
+  CMD_EMAIL: "false"
+  CMD_ALLOW_EMAIL_REGISTER: "false"
+  CMD_PROTOCOL_USESSL: "true"
+  CMD_ALLOW_ANONYMOUS: "false"
+  CMD_DEFAULT_PERMISSION: "private"

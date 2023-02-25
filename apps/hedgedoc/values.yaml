@@ -1,0 +1,21 @@
+hostname: md.xargs.dev
+namespace: hedgedoc
+litestream:
+  version: 0.3.9
+images:
+  handroll:
+    name: oci.xargs.dev/handroll/hedgedoc
+    tag: 1.9.7_litestream-0.3.9
+  upstream:
+    name: quay.io/hedgedoc/hedgedoc
+    tag: 1.9.7-alpine
+app:
+  name: hedgedoc
+  version: 1.9.7
+  port: 3000
+  exec: "node app.js"
+  dataPath: /data
+  dbPath: /data/hedgedoc.db
+  envFrom:
+    secretRef: hedgedoc
+    configMapRef: hedgedoc

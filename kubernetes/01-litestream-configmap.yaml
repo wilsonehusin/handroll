@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litestream
+  namespace: {{ .namespace }}
+data:
+  litestream.yaml: |
+    addr: ":9090"
+    dbs:
+      - path: ${DB_PATH}
+        replicas:
+          - type: s3
+            bucket: sqlite
+            path: ${LITESTREAM_REPLICA_PATH}
+            endpoint: https://s3.xargs.dev
+            region: garage
+            validation-interval: 1h

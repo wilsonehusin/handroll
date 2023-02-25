@@ -1,0 +1,7 @@
+bin/*
+!bin/.keep
+
+**/dist/*
+!**/dist/.keep
+
+**/overlay/**/*secrets.yaml
