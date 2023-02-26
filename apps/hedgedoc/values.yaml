@@ -13,6 +13,7 @@ app:
   name: hedgedoc
   version: 1.9.7
   port: 3000
+  metrics: 3000
   exec: "node app.js"
   dataPath: /data
   dbPath: /data/hedgedoc.db

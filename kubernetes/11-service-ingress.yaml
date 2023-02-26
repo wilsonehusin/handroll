@@ -6,6 +6,11 @@ metadata:
   namespace: {{ .namespace }}
   labels:
     app: {{ .app.name }}
+  {{ if .app.metrics -}}
+  annotations:
+    prometheus.io/port: "{{ .app.metrics }}"
+    prometheus.io/scrape: "true"
+  {{- end }}
 spec:
   selector:
     app: {{ .app.name }}
