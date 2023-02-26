@@ -13,3 +13,9 @@ If you would like to offer ideas where you can make use of this project, please 
 
 I would encourage you to take a look, try things out, and (most importantly) make it your own!
 
+
+## License
+
+MIT
+
+Note that this project imports external projects which may have been licensed differently.
